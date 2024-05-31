@@ -1,0 +1,152 @@
+{% extends "base.html" %} {% block content %}
+<script
+  type="text/javascript"
+  src="https://www.gstatic.com/charts/loader.js"
+></script>
+<script type="text/javascript">
+  google.charts.load("current", { packages: ["corechart"] });
+  google.charts.setOnLoadCallback(drawChart);
+
+  function drawChart() {
+    // Embedded inventory data
+    var inventoryData = [
+      {% for item in inventory_chart %}
+        { nama_barang: "{{ item.nama_barang }}", stok_barang: {{ item.stok_barang }} }{% if not loop.last %},{% endif %}
+      {% endfor %}
+    ];
+
+    // Convert data to format required by Google Charts
+    var dataArray = [['Nama Barang', 'Stok Barang']];
+    inventoryData.forEach(function(item) {
+      dataArray.push([item.nama_barang, item.stok_barang]);
+    });
+
+    // Log the dataArray to check if the conversion is correct
+    console.log(dataArray);
+
+    var data = google.visualization.arrayToDataTable(dataArray);
+
+    var options = {
+      pieHole: 0.4,
+      colors: ['#8e9aaf', '#cbc0d3', '#efd3d7', '#feeafa', '#dee2ff', '#b8a9c9', '#f6c1c7'],
+      backgroundColor: 'transparent',
+      legend: {
+        position: 'right',
+        textStyle: {
+          color: 'black',
+          fontSize: 12
+        }
+      },
+      pieSliceTextStyle: {
+        color: 'black',
+      },
+      tooltip: {
+        textStyle: {
+          color: 'black'
+        }
+      }
+    };
+
+    var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+    chart.draw(data, options);
+  }
+</script>
+
+<h3>Halo, {{ username }}</h3>
+<div class="row">
+  <div class="col-md-8">
+    <div class="card mt-3">
+      <div class="card-header"><b>Ringkasan Daftar Barang</b></div>
+      <div class="card-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Kode Barang</th>
+              <th scope="col">Nama Barang</th>
+              <th scope="col">Stok Barang</th>
+              <th scope="col">Harga Barang (Rp)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in inventory_summary %}
+            <tr>
+              <td>{{ item.kode_barang }}</td>
+              <td>{{ item.nama_barang }}</td>
+              <td>{{ item.stok_barang }}</td>
+              <td>{{ item.harga_barang }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 mt-3">
+    <div class="card">
+      <div class="card-header"><b>Grafik Stok Barang</b></div>
+      <div
+        id="donutchart"
+        class="card-body"
+        style="width: auto; height: 400px"
+      ></div>
+    </div>
+  </div>
+</div>
+<div class="row mt-3">
+  <div class="col">
+    <div class="card">
+      <div class="card-header"><b>Ringkasan Daftar Supplier</b></div>
+      <div class="card-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Nama Supplier</th>
+              <th scope="col">Alamat Supplier</th>
+              <th scope="col">Nomor Telepon</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in supplier_summary %}
+            <tr>
+              <td>{{ item.nama_supplier }}</td>
+              <td>{{ item.alamat }}</td>
+              <td>{{ item.telepon }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row mt-3">
+  <div class="col">
+    <div class="card">
+      <div class="card-header"><b>Ringkasan Daftar Toko</b></div>
+      <div class="card-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Nama Toko</th>
+              <th scope="col">Alamat Toko</th>
+              <th scope="col">Kontak Toko</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in shoplist_summary %}
+            <tr>
+              <td>{{ item.nama_toko }}</td>
+              <td>{{ item.alamat_toko }}</td>
+              <td>{{ item.kontak_toko }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS (diletakkan di bawah agar halaman lebih cepat dimuat) -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

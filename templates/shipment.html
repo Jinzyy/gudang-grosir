@@ -1,0 +1,49 @@
+{% extends "base.html" %} {% block content %}
+<div class="card">
+  <div class="card-header"><b>Kirim ke Toko</b></div>
+  <div class="container mt-3">
+    <form method="POST" action="{{ url_for('shipment') }}">
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="kode_barang" class="form-label">Kode Barang:</label>
+          <select
+            class="form-select"
+            id="kode_barang"
+            name="kode_barang"
+            required
+          >
+            <option value="" disabled selected>Select an item</option>
+            {% for kode_barang in daftar_kode_barang %}
+            <option value="{{ kode_barang }}">{{ kode_barang }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="toko_id" class="form-label">Pilih Toko:</label>
+          <select class="form-select" id="toko_id" name="toko_id" required>
+            <option value="" disabled selected>Select a store</option>
+            {% for toko in daftar_toko %}
+            <option value="{{ toko.nama_toko }}">{{ toko.nama_toko }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-mb-6">
+          <label for="jumlah_barang" class="form-label">Jumlah Barang:</label>
+          <input
+            type="number"
+            class="form-control"
+            id="jumlah_barang"
+            name="jumlah_barang"
+            min="1"
+            required
+          />
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary mb-3">Kirim Barang</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

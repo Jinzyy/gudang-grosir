@@ -1,0 +1,83 @@
+{% extends "base.html" %} {% block content %}
+<div class="card mb-4">
+  <div class="card-header">
+    <span><b>Report</b></span>
+    <a
+      href="{{ url_for('export_all_csv') }}"
+      class="btn btn-primary btn-sm float-end"
+      >Export All to CSV</a
+    >
+  </div>
+  <div class="card-body">
+    <!-- Tampilkan semua laporan di sini -->
+    <!-- Laporan Inventory -->
+    <h5>Inventory Report</h5>
+    <table class="table mb-4">
+      <thead>
+        <tr>
+          <th>Kode Barang</th>
+          <th>Nama Barang</th>
+          <th>Stok Barang</th>
+          <th>Harga Barang (Rp)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in daftar_inventory %}
+        <tr>
+          <td>{{ item.kode_barang }}</td>
+          <td>{{ item.nama_barang }}</td>
+          <td>{{ item.stok_barang }}</td>
+          <td>{{ item.harga_barang }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <!-- Laporan Order -->
+    <h5>Order Report</h5>
+    <table class="table mb-4">
+      <thead>
+        <tr>
+          <th>Kode Barang</th>
+          <th>Supplier</th>
+          <th>Jumlah Barang</th>
+          <th>Nomor Pesanan</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in order_data %}
+        <tr>
+          <td>{{ order.kode_barang }}</td>
+          <td>{{ order.supplier }}</td>
+          <td>{{ order.jumlah_barang }}</td>
+          <td>{{ order.nomor_pesanan }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <!-- Laporan Shipment -->
+    <h5>Shipment Report</h5>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Kode Barang</th>
+          <th>Nama Toko</th>
+          <th>Jumlah Barang</th>
+          <th>Nomor Pengiriman</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for shipment in shipment_data %}
+        <tr>
+          <td>{{ shipment.kode_barang }}</td>
+          <td>{{ shipment.nama_toko }}</td>
+          <td>{{ shipment.jumlah_barang }}</td>
+          <td>{{ shipment.nomor_pengiriman }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

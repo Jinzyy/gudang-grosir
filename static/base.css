@@ -1,0 +1,91 @@
+body {
+  display: flex;
+  min-height: 100vh;
+  margin: 0;
+}
+.sidebar {
+  width: 250px;
+  background-color: #202e2b;
+  color: rgb(255, 255, 255);
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: width 0.3s;
+}
+.sidebar.shrink {
+  width: 80px;
+}
+.sidebar .title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+.sidebar .title .bi-emoji-smile {
+  margin-right: 10px;
+}
+.sidebar.shrink .title .title-text {
+  display: none;
+}
+.sidebar .divider {
+  height: 1px;
+  background-color: white;
+  margin: 10px 0;
+}
+.sidebar .profile {
+  padding: 10px 20px;
+}
+.sidebar .profile .dropdown-toggle {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  color: white;
+  display: flex;
+  align-items: center;
+}
+.sidebar.shrink .profile .dropdown-toggle {
+  justify-content: center;
+}
+.sidebar .profile .profile-name {
+  margin-left: 10px;
+}
+.sidebar.shrink .profile .profile-name {
+  display: none;
+}
+.sidebar a {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+}
+#white-text {
+  color: white;
+}
+.sidebar a:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+.sidebar.shrink a {
+  justify-content: center;
+  padding: 10px 0;
+}
+.sidebar .sidebar-toggler {
+  text-align: center;
+  padding: 10px 0;
+  cursor: pointer;
+}
+.main-content {
+  flex: 1;
+  padding: 20px;
+}
+.menu-text {
+  margin-left: 10px;
+}
+.sidebar.shrink .menu-text {
+  display: none;
+}
+#dropdown-setting #dropdown-logout {
+  color: black;
+}

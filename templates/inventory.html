@@ -1,0 +1,204 @@
+{% extends "base.html" %} {% block content %}
+<div class="card">
+  <div class="card-header">
+    <b>Insert Barang</b>
+  </div>
+  <div class="container mt-3">
+    <form action="{{ url_for('inventory') }}" method="POST" class="mb-4">
+      <div class="row">
+        <div class="col">
+          <label for="new_kode_barang">Kode Barang:</label>
+          <input
+            type="text"
+            id="new_kode_barang"
+            name="new_kode_barang"
+            class="form-control"
+            placeholder="Masukkan Kode Barang"
+            required
+          />
+          <!-- Alert Bootstrap untuk kode barang sudah ada -->
+          {% with messages = get_flashed_messages(with_categories=true) %} {%
+          for category, message in messages %} {% if category == 'danger' %}
+          <div class="alert alert-danger mt-2" role="alert">{{ message }}</div>
+          {% endif %} {% endfor %} {% endwith %}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <label for="new_nama_barang">Nama Barang:</label>
+          <input
+            type="text"
+            id="new_nama_barang"
+            name="new_nama_barang"
+            class="form-control"
+            placeholder="Masukkan Nama Barang"
+            required
+          />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <label for="new_stok_barang">Stok Barang:</label>
+          <input
+            type="number"
+            id="new_stok_barang"
+            name="new_stok_barang"
+            class="form-control"
+            placeholder="Masukkan Stok Barang"
+            required
+          />
+        </div>
+        <div class="col-md-6">
+          <label for="new_harga_barang">Harga Barang:</label>
+          <input
+            type="number"
+            id="new_harga_barang"
+            name="new_harga_barang"
+            class="form-control"
+            placeholder="Masukkan Harga Barang"
+            required
+          />
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary mt-3">Add Item</button>
+    </form>
+  </div>
+</div>
+
+<div class="card mt-3">
+  <div class="card-header">
+    <b>Data Barang</b>
+  </div>
+  <div class="container">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Kode Barang</th>
+          <th scope="col">Nama Barang</th>
+          <th scope="col">Stok Barang</th>
+          <th scope="col">Harga Barang (Rp)</th>
+          <th scope="col">Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in barang %}
+        <tr>
+          <td>{{ item.kode_barang }}</td>
+          <td>{{ item.nama_barang }}</td>
+          <td>{{ item.stok_barang }}</td>
+          <td>{{ item.harga_barang }}</td>
+          <td>
+            <div class="d-flex justify-content-start">
+              <button
+                class="btn btn-warning update-btn me-2"
+                data-id="{{ item['_id'] }}"
+                data-kode="{{ item.kode_barang }}"
+                data-nama="{{ item.nama_barang }}"
+                data-harga="{{ item.harga_barang }}"
+              >
+                <i class="fas fa-pencil-alt"></i>
+              </button>
+              <form
+                action="{{ url_for('hapus_barang', item_id=item['_id']) }}"
+                method="POST"
+                onsubmit="return confirm('Apakah Anda yakin ingin menghapus barang ini?');"
+              >
+                <button type="submit" class="btn btn-danger me-2">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<div
+  class="modal fade"
+  id="updateModal"
+  tabindex="-1"
+  aria-labelledby="updateModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updateModalLabel">Update Barang</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form id="updateForm" action="" method="POST">
+          <div class="mb-3">
+            <label for="update_kode_barang" class="form-label"
+              >Kode Barang:</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="update_kode_barang"
+              name="new_kode_barang"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="update_nama_barang" class="form-label"
+              >Nama Barang:</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="update_nama_barang"
+              name="new_nama_barang"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="update_harga_barang" class="form-label"
+              >Harga Barang:</label
+            >
+            <input
+              type="number"
+              class="form-control"
+              id="update_harga_barang"
+              name="new_harga_barang"
+              required
+            />
+          </div>
+          <button type="submit" class="btn btn-primary">Update</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"
+></script>
+
+<script>
+  // Menangani klik tombol update
+  $(document).on("click", ".update-btn", function () {
+    var item_id = $(this).data("id");
+    var kode_barang = $(this).data("kode");
+    var nama_barang = $(this).data("nama");
+    var harga_barang = $(this).data("harga");
+
+    $("#update_kode_barang").val(kode_barang);
+    $("#update_nama_barang").val(nama_barang);
+    $("#update_harga_barang").val(harga_barang);
+    $("#updateForm").attr("action", "/update_barang/" + item_id);
+
+    // Tampilkan modal update
+    $("#updateModal").modal("show");
+  });
+</script>
+
+{% endblock %}
